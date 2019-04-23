@@ -10,8 +10,12 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.19",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
+    "vue-axios": "^2.1.4",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
