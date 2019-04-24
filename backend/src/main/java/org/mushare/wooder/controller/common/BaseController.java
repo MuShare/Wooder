@@ -1,14 +1,20 @@
 package org.mushare.wooder.controller.common;
 
 import org.mushare.wooder.service.GroupManager;
+import org.mushare.wooder.service.ProjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class BaseController {
 
+    protected final static String GroupIdFlag = "org.mushare.wooder.controller.GrouperController.GroupIdFlag";
+
     @Autowired
     protected GroupManager groupManager;
+
+    @Autowired
+    protected ProjectManager projectManager;
 
     protected String token(HttpServletRequest request) {
         return request.getHeader("token");

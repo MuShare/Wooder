@@ -37,7 +37,7 @@
 
                 this.axios.post('/web/group/login', params).then(response => {
                     if (response && response.status == 200) {
-
+                        this.$router.push('/group/home')
                     }
                 }).catch(error => {
                     if (error.response) {

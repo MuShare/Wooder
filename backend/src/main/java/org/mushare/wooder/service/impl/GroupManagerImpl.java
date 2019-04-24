@@ -1,5 +1,6 @@
 package org.mushare.wooder.service.impl;
 
+import org.mushare.wooder.bean.GroupBean;
 import org.mushare.wooder.domain.Group;
 import org.mushare.wooder.service.GroupManager;
 import org.mushare.wooder.service.common.BaseManager;
@@ -24,6 +25,18 @@ public class GroupManagerImpl extends BaseManager implements GroupManager {
         group.setName(name);
         groupDao.save(group);
         return Result.success();
+    }
+
+    @Override
+    public Result<GroupBean> login(String email, String password) {
+        Group group = groupDao.getByEmail(email);
+        if (group == null) {
+            return Result.error(ResultCode.GrouprEmailNotRegistered);
+        }
+        if (!group.getPassword().equals(password)) {
+            return Result.error(ResultCode.GroupPasswordWrong);
+        }
+        return Result.data(new GroupBean(group));
     }
 
 }
