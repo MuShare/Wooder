@@ -8,9 +8,12 @@ import org.mushare.wooder.service.ProjectManager;
 import org.mushare.wooder.service.common.BaseManager;
 import org.mushare.wooder.service.common.Result;
 import org.mushare.wooder.service.common.ResultCode;
+import org.mushare.wooder.service.common.ResultList;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectManagerImpl extends BaseManager implements ProjectManager {
@@ -29,6 +32,18 @@ public class ProjectManagerImpl extends BaseManager implements ProjectManager {
         project.setGroup(group.get());
         projectDao.save(project);
         return Result.data(new ProjectBean(project));
+    }
+
+    @Override
+    public ResultList<ProjectBean> getProjectsByGroupId(String groupId) {
+        Optional<Group> group = groupDao.findById(groupId);
+        if (!group.isPresent()) {
+            Debug.error("Cannot find a group with this group id " + groupId);
+            return ResultList.error(ResultCode.GroupIdError);
+        }
+        List<ProjectBean> projectBeans = projectDao.findByGroupOrderByCreatedAt(group.get())
+                .stream().map(project -> new ProjectBean(project)).collect(Collectors.toList());
+        return ResultList.data(projectBeans);
     }
 
 }

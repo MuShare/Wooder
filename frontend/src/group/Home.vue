@@ -22,27 +22,15 @@
         </b-navbar>
         <br>
         <b-card-group columns>
-            <b-card>
-                <h2>MuShare</h2>
-            </b-card>
-            <b-card>
-                <h2>Rinrin</h2>
-            </b-card>
-            <b-card>
-                <h2>Athene</h2>
-            </b-card>
-            <b-card>
-                <h2>Tipstar</h2>
-            </b-card>
-            <b-card>
-                <h2>RxBinding</h2>
+            <b-card v-for="project in projects" :key="project.id">
+                <h2>{{ project.name }}</h2>
             </b-card>
         </b-card-group>
         <div>
             <b-button block variant="light" size="lg" v-b-modal.add-project>Create a Project</b-button>
             <b-modal id="add-project" ref="addProject" title="New Project" @ok="addProject">
                 <b-form-group label-cols-sm="4" label-cols-lg="3" label="Project Name" label-for="project-name">
-                    <b-form-input id="project-name" v-model="project.name"></b-form-input>
+                    <b-form-input id="project-name" v-model="form.name"></b-form-input>
                 </b-form-group>
             </b-modal>
         </div>
@@ -53,23 +41,39 @@
     export default {
         data() {
             return {
-                project: {
+                form: {
                     name: ''
-                }
+                },
+                projects: []
             }
         },
+        mounted() {
+            this.loadProjects()
+        },
         methods: {
+            loadProjects() {
+                this.axios.get('/web/project/list').then(response => {
+                    if (response && response.status == 200) {
+                        this.projects = response.data.result.projects
+                    }
+                }).catch(error => {
+                    if (error.response) {
+                        alert(error.response.data.message)
+                    }
+                })
+            },
             addProject() {
                 var params = new URLSearchParams()
-                params.append('name', this.project.name)
+                params.append('name', this.form.name)
 
                 this.axios.post('/web/project/add', params).then(response => {
                     if (response && response.status == 200) {
                         this.$refs.addProject.hide()
+                        this.loadProjects()
                     }
                 }).catch(error => {
                     if (error.response) {
-                        alert(error.response.data.message);
+                        alert(error.response.data.message)
                     }
                 })
             }

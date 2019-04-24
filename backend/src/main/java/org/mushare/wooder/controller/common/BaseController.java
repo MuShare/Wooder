@@ -3,8 +3,10 @@ package org.mushare.wooder.controller.common;
 import org.mushare.wooder.service.GroupManager;
 import org.mushare.wooder.service.ProjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.function.Function;
 
 public class BaseController {
 
@@ -39,5 +41,14 @@ public class BaseController {
         }
         return ip;
     }
+
+    protected ResponseEntity authGroup(HttpServletRequest request, Function<String, ResponseEntity> authed) {
+        String groupId = (String) request.getSession().getAttribute(GroupIdFlag);
+        if (groupId == null) {
+            return Response.badRequest(ErrorCode.GroupNotLogin).build();
+        }
+        return authed.apply(groupId);
+    }
+
 
 }
