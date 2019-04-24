@@ -22,7 +22,18 @@ export default new Router({
         }, {
             path: '/group/home',
             name: 'Group Home',
-            component: () => import('@/group/Home.vue')
+            component: () => import('@/group/Home.vue'),
+            children: [
+                {
+                    path: '/group/home/projects',
+                    name: 'Group Projects',
+                    component: require('@/group/Projects.vue').default
+                }, {
+                    path: '/group/home/members',
+                    name: 'Group Members',
+                    component: require('@/group/Members.vue').default
+                }
+            ]
         }
     ]
 })
