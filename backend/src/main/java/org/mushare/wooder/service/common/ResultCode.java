@@ -17,7 +17,9 @@ public enum ResultCode {
     MemberIdError(3001),
     MemberEmailRegistered(3002),
     MemberEmailNotRegistered(3003),
-    MemberPasswordWrong(3004);
+    MemberPasswordWrong(3004),
+
+    TextFolderIdError(4001);
 
     public int code;
 

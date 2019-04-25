@@ -23,7 +23,10 @@ public enum ErrorCode {
     MemberPasswordWrong(2004, "Password is wrong."),
 
     // ProjectController
-    ProjectIdNotExist(2001, "Project id is not existing.");
+    ProjectIdNotExist(3001, "Project id is not existing."),
+
+    //TextFolderController
+    TextFolderIdNotExist(4001, "Text folder id is not existing.");
 
     public int code;
     public String message;

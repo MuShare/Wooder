@@ -10,4 +10,6 @@ public interface TextFolderManager {
 
     ResultList<TextFolderBean> getFoldersByProjectId(String projectId, String memberId);
 
+    Result<TextFolderBean> textfolderInfo(String textfolderId, String memberId);
+
 }

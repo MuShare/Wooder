@@ -5,7 +5,7 @@
             <b-col cols="8">
                 <b-list-group>
                     <b-list-group-item v-for="folder in textfolders" :key="folder.id">
-                        {{ folder.name }}
+                        <router-link :to="`/member/home/textfolder/${folder.id}`">{{ folder.name }}</router-link>
                     </b-list-group-item>
                 </b-list-group>
                 <br>

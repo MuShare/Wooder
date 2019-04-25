@@ -48,11 +48,13 @@ export default new Router({
             children: [
                 {
                     path: '/member/home/projects',
-                    name: 'Projects of Members',
                     component: require('@/member/Projects.vue').default
                 }, {
                     path: '/member/home/project/:projectId',
                     component: require('@/member/Project.vue').default
+                }, {
+                    path: '/member/home/textfolder/:textfolderId',
+                    component: require('@/member/TextFolder.vue').default
                 }
             ]
         }

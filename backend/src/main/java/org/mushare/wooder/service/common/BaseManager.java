@@ -3,6 +3,7 @@ package org.mushare.wooder.service.common;
 import org.mushare.wooder.dao.*;
 import org.mushare.wooder.domain.Member;
 import org.mushare.wooder.domain.Project;
+import org.mushare.wooder.domain.TextFolder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
@@ -45,5 +46,20 @@ public class BaseManager {
         return authed.apply(project.get());
     }
 
+    protected Result authTextFolder(String textfolderId, String memberId, Function<TextFolder, Result> authed) {
+        Optional<TextFolder> textFolder = textFolderDao.findById(textfolderId);
+        if (!textFolder.isPresent()) {
+            return Result.error(ResultCode.TextFolderIdError);
+        }
+        Optional<Member> member = memberDao.findById(memberId);
+        if (!member.isPresent()) {
+            return Result.error(ResultCode.MemberIdError);
+        }
+        Project project = textFolder.get().getProject();
+        if (!projectDao.findByGroupOrderByCreatedAt(member.get().getGroup()).contains(project)) {
+            return Result.error(ResultCode.NoPrivilege);
+        }
+        return authed.apply(textFolder.get());
+    }
 
 }

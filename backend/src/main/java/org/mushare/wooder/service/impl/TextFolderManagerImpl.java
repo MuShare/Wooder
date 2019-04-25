@@ -1,18 +1,13 @@
 package org.mushare.wooder.service.impl;
 
 import org.mushare.wooder.bean.TextFolderBean;
-import org.mushare.wooder.domain.Member;
-import org.mushare.wooder.domain.Project;
 import org.mushare.wooder.domain.TextFolder;
 import org.mushare.wooder.service.TextFolderManager;
 import org.mushare.wooder.service.common.BaseManager;
 import org.mushare.wooder.service.common.Result;
-import org.mushare.wooder.service.common.ResultCode;
 import org.mushare.wooder.service.common.ResultList;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,8 +30,15 @@ public class TextFolderManagerImpl extends BaseManager implements TextFolderMana
     public ResultList<TextFolderBean> getFoldersByProjectId(String projectId, String memberId) {
         return (ResultList<TextFolderBean>) authProject(projectId, memberId, project -> {
             return ResultList.data(textFolderDao.findByProjectOrderByName(project).stream().map(textFolder -> {
-                return new TextFolderBean(textFolder);
+                return new TextFolderBean(textFolder, false);
             }).collect(Collectors.toList()));
+        });
+    }
+
+    @Override
+    public Result<TextFolderBean> textfolderInfo(String textfolderId, String memberId) {
+        return authTextFolder(textfolderId, memberId, textFolder -> {
+            return Result.data(new TextFolderBean(textFolder, true));
         });
     }
 
