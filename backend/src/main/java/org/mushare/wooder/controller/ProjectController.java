@@ -37,11 +37,21 @@ public class ProjectController extends BaseController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity getProjects(HttpServletRequest request) {
-        return authGroup(request, groupId -> {
+        return authGroupOrMember(request, groupId -> {
             ResultList<ProjectBean> result = projectManager.getProjectsByGroupId(groupId);
             if (result.hasError()) {
                 return result.errorMapping(ImmutableMap.of(
                         ResultCode.GroupIdError, ErrorCode.GroupIdNotExist
+                ));
+            }
+            return Response.ok()
+                    .append("projects", result.getData())
+                    .build();
+        }, memberId -> {
+            ResultList<ProjectBean> result = projectManager.getProjectsByMemberId(memberId);
+            if (result.hasError()) {
+                return result.errorMapping(ImmutableMap.of(
+                        ResultCode.MemberIdError, ErrorCode.MemberIdNotExist
                 ));
             }
             return Response.ok()

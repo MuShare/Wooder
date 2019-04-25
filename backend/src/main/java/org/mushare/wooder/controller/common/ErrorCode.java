@@ -15,14 +15,12 @@ public enum ErrorCode {
     GroupExist(1002, "This group email has been registered."),
     GroupNotExist(1003, "This email is not exsit."),
     GroupPasswordWrong(1004, "Password is wrong."),
-    GroupNotLogin(1005, "Group manager does not login."),
 
     // MemberController
     MemberIdNotExist(2001, "Member id is not existing."),
     MemberExist(2002, "This member email has been registered."),
     MemberNotExist(2003, "This member email has not been registered."),
-    MemberPasswordWrong(2004, "Password is wrong."),
-    MemberNotLogin(2005, "Group member does not login.");
+    MemberPasswordWrong(2004, "Password is wrong.");
 
     public int code;
     public String message;

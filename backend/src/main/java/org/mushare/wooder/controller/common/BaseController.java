@@ -56,7 +56,7 @@ public class BaseController {
     protected ResponseEntity authGroup(HttpServletRequest request, Function<String, ResponseEntity> authed) {
         String groupId = (String) request.getSession().getAttribute(GroupIdFlag);
         if (groupId == null) {
-            return Response.badRequest(ErrorCode.GroupNotLogin).build();
+            return Response.badRequest(ErrorCode.ErrorNoSession).build();
         }
         return authed.apply(groupId);
     }
@@ -68,9 +68,23 @@ public class BaseController {
     protected ResponseEntity authMember(HttpServletRequest request, Function<String, ResponseEntity> authed) {
         String memberId = (String) request.getSession().getAttribute(MemberIdFlag);
         if (memberId == null) {
-            return Response.badRequest(ErrorCode.MemberNotLogin).build();
+            return Response.badRequest(ErrorCode.ErrorNoSession).build();
         }
         return authed.apply(memberId);
+    }
+
+    protected ResponseEntity authGroupOrMember(HttpServletRequest request,
+                                               Function<String, ResponseEntity> groupAuthed,
+                                               Function<String, ResponseEntity> memberAuthed) {
+        String groupId = (String) request.getSession().getAttribute(GroupIdFlag);
+        if (groupId != null) {
+            return groupAuthed.apply(groupId);
+        }
+        String memberId = (String) request.getSession().getAttribute(MemberIdFlag);
+        if (memberId != null) {
+            return memberAuthed.apply(memberId);
+        }
+        return Response.badRequest(ErrorCode.ErrorNoSession).build();
     }
 
 }

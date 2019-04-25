@@ -10,4 +10,6 @@ public interface ProjectManager {
 
     ResultList<ProjectBean> getProjectsByGroupId(String groupId);
 
+    ResultList<ProjectBean> getProjectsByMemberId(String memberId);
+
 }

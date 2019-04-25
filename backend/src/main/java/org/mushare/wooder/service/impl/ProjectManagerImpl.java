@@ -3,6 +3,7 @@ package org.mushare.wooder.service.impl;
 import org.mushare.common.util.Debug;
 import org.mushare.wooder.bean.ProjectBean;
 import org.mushare.wooder.domain.Group;
+import org.mushare.wooder.domain.Member;
 import org.mushare.wooder.domain.Project;
 import org.mushare.wooder.service.ProjectManager;
 import org.mushare.wooder.service.common.BaseManager;
@@ -42,6 +43,17 @@ public class ProjectManagerImpl extends BaseManager implements ProjectManager {
             return ResultList.error(ResultCode.GroupIdError);
         }
         List<ProjectBean> projectBeans = projectDao.findByGroupOrderByCreatedAt(group.get())
+                .stream().map(project -> new ProjectBean(project)).collect(Collectors.toList());
+        return ResultList.data(projectBeans);
+    }
+
+    @Override
+    public ResultList<ProjectBean> getProjectsByMemberId(String memberId) {
+        Optional<Member> member = memberDao.findById(memberId);
+        if (!member.isPresent()) {
+            return ResultList.error(ResultCode.MemberIdError);
+        }
+        List<ProjectBean> projectBeans = projectDao.findByGroupOrderByCreatedAt(member.get().getGroup())
                 .stream().map(project -> new ProjectBean(project)).collect(Collectors.toList());
         return ResultList.data(projectBeans);
     }
