@@ -39,7 +39,6 @@
         },
         mounted() {
             this.loadMemberInfo()
-            this.$router.push('/member/home/projects')
         },
         methods: {
             loadMemberInfo() {

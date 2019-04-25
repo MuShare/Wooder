@@ -50,6 +50,9 @@ export default new Router({
                     path: '/member/home/projects',
                     name: 'Projects of Members',
                     component: require('@/member/Projects.vue').default
+                }, {
+                    path: '/member/home/project/:projectId',
+                    component: require('@/member/Project.vue').default
                 }
             ]
         }

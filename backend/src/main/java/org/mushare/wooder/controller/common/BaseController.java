@@ -5,6 +5,7 @@ import org.mushare.wooder.bean.MemberBean;
 import org.mushare.wooder.service.GroupManager;
 import org.mushare.wooder.service.MemberManager;
 import org.mushare.wooder.service.ProjectManager;
+import org.mushare.wooder.service.TextFolderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -24,6 +25,9 @@ public class BaseController {
 
     @Autowired
     protected MemberManager memberManager;
+
+    @Autowired
+    protected TextFolderManager textFolderManager;
 
     protected String token(HttpServletRequest request) {
         return request.getHeader("token");

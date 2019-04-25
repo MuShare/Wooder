@@ -38,7 +38,7 @@
                     password: this.form.password
                 }).then(response => {
                     if (response && response.status == 200) {
-                        this.$router.push('/member/home')
+                        this.$router.push('/member/home/projects')
                     }
                 }).catch(error => {
                     if (error.response) {
