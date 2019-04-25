@@ -6,6 +6,7 @@ import org.mushare.wooder.controller.common.ErrorCode;
 import org.mushare.wooder.controller.common.Response;
 import org.mushare.wooder.service.common.Result;
 import org.mushare.wooder.service.common.ResultCode;
+import org.mushare.wooder.service.common.ResultList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,21 @@ public class MemberController extends BaseController {
                 ));
             }
             return Response.success().build();
+        });
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public ResponseEntity getMembersOfGroup(HttpServletRequest request) {
+        return authGroup(request, groupId -> {
+            ResultList result = memberManager.getMembersByGroupId(groupId);
+            if (result.hasError()) {
+                return result.errorMapping(ImmutableMap.of(
+                        ResultCode.GroupIdError, ErrorCode.GroupIdNotExist
+                ));
+            }
+            return Response.success()
+                    .append("members", result.getData())
+                    .build();
         });
     }
 

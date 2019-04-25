@@ -1,5 +1,11 @@
 <template>
     <div>
+        <b-card-group columns>
+            <b-card v-for="member in members" :key="member.id">
+                <h2>{{ member.name }}</h2>
+                <p>{{ member.email }}</p>
+            </b-card>
+        </b-card-group>
         <div>
             <b-button block variant="light" size="lg" v-b-modal.add-member>Create a Member</b-button>
             <b-modal id="add-member" ref="addMember" title="New Member" @ok="handleOk">
@@ -29,6 +35,7 @@
     export default {
         data() {
             return {
+                members: [],
                 form: {
                     invalid: false,
                     email: '',
@@ -37,7 +44,21 @@
                 }
             }
         },
+        mounted() {
+            this.loadMembers()
+        },
         methods: {
+            loadMembers() {
+                this.axios.get('/web/member/list').then(response => {
+                    if (response && response.status == 200) {
+                        this.members = response.data.result.members
+                    }
+                }).catch(error => {
+                    if (error.response) {
+                        alert(error.response.data.message)
+                    }
+                })
+            },
             checkFormValidity() {
                 const valid = this.$refs.addProjectForm.checkValidity()
                 this.form.invalid = !valid
@@ -61,6 +82,7 @@
                     console.log(response)
                     if (response && response.status == 200) {
                         this.$refs.addMember.hide()
+                        this.loadMembers()
                     }
                 }).catch(error => {
                     if (error.response) {
