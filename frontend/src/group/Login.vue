@@ -31,11 +31,10 @@
             onSubmit(evt) {
                 evt.preventDefault();
 
-                var params = new URLSearchParams()
-                params.append('email', this.form.email)
-                params.append('password', this.form.password)
-
-                this.axios.post('/web/group/login', params).then(response => {
+                this.axios.post('/web/group/login', {
+                    email: this.form.email,
+                    password: this.form.password
+                }).then(response => {
                     if (response && response.status == 200) {
                         this.$router.push('/group/home')
                     }

@@ -41,7 +41,6 @@
             loadGroupInfo() {
                 this.axios.get('/web/group/info').then(response => {
                     if (response && response.status == 200) {
-                        console.log(response)
                         this.group = response.data.result.group
                     }
                 }).catch(() => {

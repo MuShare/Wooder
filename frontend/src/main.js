@@ -2,6 +2,7 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import qs from 'qs'
 
 import App from './App.vue'
 import router from './router'
@@ -19,3 +20,8 @@ new Vue({
     store,
     render: h => h(App)
 }).$mount('#app')
+
+axios.defaults.transformRequest = function(data) {
+    data = qs.stringify(data)
+    return data
+}

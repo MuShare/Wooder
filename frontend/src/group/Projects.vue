@@ -42,10 +42,9 @@
                 })
             },
             addProject() {
-                var params = new URLSearchParams()
-                params.append('name', this.form.name)
-
-                this.axios.post('/web/project/add', params).then(response => {
+                this.axios.post('/web/project/add', {
+                    name: this.form.name
+                }).then(response => {
                     if (response && response.status == 200) {
                         this.$refs.addProject.hide()
                         this.loadProjects()
