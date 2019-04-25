@@ -11,7 +11,7 @@ public enum ErrorCode {
     ErrorAccessToken(901, "Access token is wrong."),
 
     // GroupController
-    GroupIdNotExist(1001, "User id is not existing."),
+    GroupIdNotExist(1001, "Group id is not existing."),
     GroupExist(1011, "This group email has been registered."),
     GroupNotExist(1022, "This email is not exsit."),
     GroupPasswordWrong(1023, "Password is wrong."),

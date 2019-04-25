@@ -8,6 +8,8 @@ import org.mushare.wooder.service.common.Result;
 import org.mushare.wooder.service.common.ResultCode;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GroupManagerImpl extends BaseManager implements GroupManager {
 
@@ -37,6 +39,15 @@ public class GroupManagerImpl extends BaseManager implements GroupManager {
             return Result.error(ResultCode.GroupPasswordWrong);
         }
         return Result.data(new GroupBean(group));
+    }
+
+    @Override
+    public Result<GroupBean> groupInfo(String groupId) {
+        Optional<Group> group = groupDao.findById(groupId);
+        if (!group.isPresent()) {
+            return Result.error(ResultCode.GroupIdError);
+        }
+        return Result.data(new GroupBean(group.get()));
     }
 
 }

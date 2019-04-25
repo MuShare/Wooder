@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/group/Login.vue'
+import Home from '@/group/Register.vue'
+import SessionOut from '@/components/SessionOut'
 
 Vue.use(Router)
 
@@ -15,10 +17,7 @@ export default new Router({
         }, {
             path: '/group/register',
             name: 'Group Registeration',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ '@/group/Register.vue')
+            component: Home
         }, {
             path: '/group/home',
             name: 'Group Home',
@@ -34,6 +33,10 @@ export default new Router({
                     component: require('@/group/Members.vue').default
                 }
             ]
+        }, {
+            path: '/sessionOut',
+            name: 'sessionOut',
+            component: SessionOut
         }
     ]
 })

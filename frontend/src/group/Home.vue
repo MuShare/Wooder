@@ -13,7 +13,7 @@
 
                 <b-navbar-nav class="ml-auto">
                     <b-nav-item-dropdown right>
-                        <template slot="button-content"><em>Group Name</em></template>
+                        <template slot="button-content"><em>{{group.name}}</em></template>
                         <b-dropdown-item href="#">Settings</b-dropdown-item>
                         <b-dropdown-item href="#">Sign Out</b-dropdown-item>
                     </b-nav-item-dropdown>
@@ -28,8 +28,26 @@
 
 <script>
     export default {
+        data() {
+            return {
+                group: {}
+            }
+        },
         mounted() {
+            this.loadGroupInfo()
             this.$router.push('/group/home/projects')
+        },
+        methods: {
+            loadGroupInfo() {
+                this.axios.get('/web/group/info').then(response => {
+                    if (response && response.status == 200) {
+                        console.log(response)
+                        this.group = response.data.result.group
+                    }
+                }).catch(() => {
+                    this.$router.push('/sessionOut')
+                })
+            }
         }
     }
 </script>

@@ -9,4 +9,6 @@ public interface GroupManager {
 
     Result<GroupBean> login(String email, String password);
 
+    Result<GroupBean> groupInfo(String groupId);
+
 }

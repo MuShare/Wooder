@@ -45,4 +45,17 @@ public class GroupController extends BaseController {
                 .build();
     }
 
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public ResponseEntity getGroupInfo(HttpServletRequest request) {
+        return authGroup(request, groupId -> {
+            Result<GroupBean> result = groupManager.groupInfo(groupId);
+            if (result.hasError()) {
+                return result.errorMapping(ImmutableMap.of(ResultCode.GroupIdError, ErrorCode.GroupIdNotExist));
+            }
+            return Response.success()
+                    .append("group", result.getData())
+                    .build();
+        });
+    }
+
 }
