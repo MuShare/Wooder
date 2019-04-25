@@ -38,11 +38,8 @@ public class GroupController extends BaseController {
                     ResultCode.GroupPasswordWrong, ErrorCode.GroupPasswordWrong
             ));
         }
-        GroupBean groupBean = result.getData();
-        request.getSession().setAttribute(GroupIdFlag, groupBean.getId());
-        return Response.success()
-                .append("groupId", groupBean)
-                .build();
+        groupLogin(request, result.getData());
+        return Response.success().build();
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
@@ -52,7 +49,7 @@ public class GroupController extends BaseController {
             if (result.hasError()) {
                 return result.errorMapping(ImmutableMap.of(ResultCode.GroupIdError, ErrorCode.GroupIdNotExist));
             }
-            return Response.success()
+            return Response.ok()
                     .append("group", result.getData())
                     .build();
         });

@@ -1,6 +1,7 @@
 package org.mushare.wooder.controller;
 
 import com.google.common.collect.ImmutableMap;
+import org.mushare.wooder.bean.MemberBean;
 import org.mushare.wooder.controller.common.BaseController;
 import org.mushare.wooder.controller.common.ErrorCode;
 import org.mushare.wooder.controller.common.Response;
@@ -42,10 +43,39 @@ public class MemberController extends BaseController {
                         ResultCode.GroupIdError, ErrorCode.GroupIdNotExist
                 ));
             }
-            return Response.success()
+            return Response.ok()
                     .append("members", result.getData())
                     .build();
         });
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity loginWithEmail(@RequestParam String email, @RequestParam String password, HttpServletRequest request) {
+        Result<MemberBean> result = memberManager.login(email, password);
+        if (result.hasError()) {
+            return result.errorMapping(ImmutableMap.of(
+                    ResultCode.MemberEmailNotRegistered, ErrorCode.MemberNotExist,
+                    ResultCode.MemberPasswordWrong, ErrorCode.MemberPasswordWrong
+            ));
+        }
+        memberLogin(request, result.getData());
+        return Response.success().build();
+    }
+
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public ResponseEntity getMemberInfo(HttpServletRequest request) {
+        return authMember(request, memberId -> {
+            Result<MemberBean> result = memberManager.memberInfo(memberId);
+            if (result.hasError()) {
+                return result.errorMapping(ImmutableMap.of(
+                        ResultCode.MemberIdError, ErrorCode.MemberIdNotExist
+                ));
+            }
+            return Response.ok()
+                    .append("member", result.getData())
+                    .build();
+        });
+
     }
 
 }

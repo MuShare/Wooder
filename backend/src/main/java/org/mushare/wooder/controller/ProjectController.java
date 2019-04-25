@@ -29,7 +29,7 @@ public class ProjectController extends BaseController {
                         ResultCode.GroupIdError, ErrorCode.GroupIdNotExist
                 ));
             }
-            return Response.success()
+            return Response.ok()
                     .append("project", result.getData())
                     .build();
         });
@@ -44,7 +44,7 @@ public class ProjectController extends BaseController {
                         ResultCode.GroupIdError, ErrorCode.GroupIdNotExist
                 ));
             }
-            return Response.success()
+            return Response.ok()
                     .append("projects", result.getData())
                     .build();
         });

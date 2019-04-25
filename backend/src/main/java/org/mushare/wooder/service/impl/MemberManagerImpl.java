@@ -51,7 +51,23 @@ public class MemberManagerImpl extends BaseManager implements MemberManager {
 
     @Override
     public Result<MemberBean> login(String email, String password) {
-        return null;
+        Member member = memberDao.getByEmail(email);
+        if (member == null) {
+            return Result.error(ResultCode.MemberEmailNotRegistered);
+        }
+        if (!member.getPassword().equals(password)) {
+            return Result.error(ResultCode.MemberPasswordWrong);
+        }
+        return Result.data(new MemberBean(member));
+    }
+
+    @Override
+    public Result<MemberBean> memberInfo(String memberId) {
+        Optional<Member> member = memberDao.findById(memberId);
+        if (!member.isPresent()) {
+            return Result.error(ResultCode.MemberIdError);
+        }
+        return Result.data(new MemberBean(member.get()));
     }
 
 }

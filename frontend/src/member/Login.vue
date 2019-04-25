@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <img src="@/assets/logo.png" alt="">
-        <h3>Wooder Group</h3>
+        <h3>Wooder</h3>
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-form-group label="Email address:" label-for="group-email">
                 <b-form-input id="group-email" type="email" v-model="form.email" required placeholder="Enter email address">
@@ -12,9 +12,8 @@
                 </b-form-input>
             </b-form-group>
             <b-button type="submit" variant="success" block>Login</b-button>
-            <b-button variant="light" block @click="$router.push('/group/register')">Register</b-button>
             <br>
-            <b-link href="/">Login with group member</b-link>
+            <b-link href="/group/login">Login with group manager</b-link>
         </b-form>
     </div>
 </template>
@@ -34,12 +33,12 @@
             onSubmit(evt) {
                 evt.preventDefault();
 
-                this.axios.post('/web/group/login', {
+                this.axios.post('/web/member/login', {
                     email: this.form.email,
                     password: this.form.password
                 }).then(response => {
                     if (response && response.status == 200) {
-                        this.$router.push('/group/home')
+                        this.$router.push('/member/home')
                     }
                 }).catch(error => {
                     if (error.response) {

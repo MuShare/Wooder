@@ -11,6 +11,7 @@ public class MemberBean extends BaseBean {
 
     private String email;
     private String name;
+    private GroupBean group;
 
     public MemberBean(Member member) {
         this.id = member.getId();
@@ -18,6 +19,7 @@ public class MemberBean extends BaseBean {
         this.updatedAt = new Date(member.getUpdatedAt());
         this.email = member.getEmail();
         this.name = member.getName();
+        this.group = new GroupBean(member.getGroup());
     }
 
 }

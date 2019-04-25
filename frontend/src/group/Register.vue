@@ -17,6 +17,8 @@
                 </b-form-input>
             </b-form-group>
             <b-button type="submit" variant="success" block>Submit</b-button>
+            <br>
+            <b-link href="/group/login">Back to login</b-link>
         </b-form>
     </div>
 </template>

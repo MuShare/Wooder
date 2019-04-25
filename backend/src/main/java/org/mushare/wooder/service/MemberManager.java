@@ -12,4 +12,6 @@ public interface MemberManager {
 
     Result<MemberBean> login(String email, String password);
 
+    Result<MemberBean> memberInfo(String memberId);
+
 }

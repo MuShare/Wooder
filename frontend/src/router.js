@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/group/Login.vue'
-import Home from '@/group/Register.vue'
+import MemberLogin from '@/member/Login.vue'
+import GroupLogin from '@/group/Login.vue'
 import SessionOut from '@/components/SessionOut'
 
 Vue.use(Router)
@@ -12,12 +12,20 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'login',
-            component: Login
+            name: 'Group Member Login',
+            component: MemberLogin
+        }, {
+            path: '/group/login',
+            name: 'Group Manager Login',
+            component: GroupLogin
+        }, {
+            path: '/sessionOut',
+            name: 'sessionOut',
+            component: SessionOut
         }, {
             path: '/group/register',
             name: 'Group Registeration',
-            component: Home
+            component: () => import('@/group/Register.vue')
         }, {
             path: '/group/home',
             name: 'Group Home',
@@ -25,18 +33,25 @@ export default new Router({
             children: [
                 {
                     path: '/group/home/projects',
-                    name: 'Group Projects',
+                    name: 'Projects of Group',
                     component: require('@/group/Projects.vue').default
                 }, {
                     path: '/group/home/members',
-                    name: 'Group Members',
+                    name: 'Members of Group',
                     component: require('@/group/Members.vue').default
                 }
             ]
         }, {
-            path: '/sessionOut',
-            name: 'sessionOut',
-            component: SessionOut
+            path: '/member/home',
+            name: 'Member Home',
+            component: () => import('@/member/Home.vue'),
+            children: [
+                {
+                    path: '/member/home/projects',
+                    name: 'Projects of Members',
+                    component: require('@/member/Projects.vue').default
+                }
+            ]
         }
     ]
 })
