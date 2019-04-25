@@ -8,6 +8,8 @@ public interface ProjectManager {
 
     Result<ProjectBean> add(String name, String groupId);
 
+    Result<ProjectBean> projectInfo(String projectId, String memberId);
+
     ResultList<ProjectBean> getProjectsByGroupId(String groupId);
 
     ResultList<ProjectBean> getProjectsByMemberId(String memberId);

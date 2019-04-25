@@ -20,7 +20,10 @@ public enum ErrorCode {
     MemberIdNotExist(2001, "Member id is not existing."),
     MemberExist(2002, "This member email has been registered."),
     MemberNotExist(2003, "This member email has not been registered."),
-    MemberPasswordWrong(2004, "Password is wrong.");
+    MemberPasswordWrong(2004, "Password is wrong."),
+
+    // ProjectController
+    ProjectIdNotExist(2001, "Project id is not existing.");
 
     public int code;
     public String message;

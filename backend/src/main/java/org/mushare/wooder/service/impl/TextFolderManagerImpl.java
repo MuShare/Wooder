@@ -40,19 +40,4 @@ public class TextFolderManagerImpl extends BaseManager implements TextFolderMana
         });
     }
 
-    private Result authProject(String projectId, String memberId, Function<Project, Result> authed) {
-        Optional<Project> project = projectDao.findById(projectId);
-        if (!project.isPresent()) {
-            return Result.error(ResultCode.ProjectIdError);
-        }
-        Optional<Member> member = memberDao.findById(memberId);
-        if (!member.isPresent()) {
-            return Result.error(ResultCode.MemberIdError);
-        }
-        if (!projectDao.findByGroupOrderByCreatedAt(member.get().getGroup()).contains(project.get())) {
-            return Result.error(ResultCode.NoPrivilege);
-        }
-        return authed.apply(project.get());
-    }
-
 }

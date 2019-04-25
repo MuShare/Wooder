@@ -36,6 +36,13 @@ public class ProjectManagerImpl extends BaseManager implements ProjectManager {
     }
 
     @Override
+    public Result<ProjectBean> projectInfo(String projectId, String memberId) {
+        return authProject(projectId, memberId, project -> {
+            return Result.data(new ProjectBean(project));
+        });
+    }
+
+    @Override
     public ResultList<ProjectBean> getProjectsByGroupId(String groupId) {
         Optional<Group> group = groupDao.findById(groupId);
         if (!group.isPresent()) {

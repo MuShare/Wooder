@@ -59,11 +59,6 @@
                     }
                 })
             },
-            checkFormValidity() {
-                const valid = this.$refs.addProjectForm.checkValidity()
-                this.form.invalid = !valid
-                return valid
-            },
             handleOk(bvModalEvt) {
                 // Prevent modal from closing
                 bvModalEvt.preventDefault()
@@ -71,7 +66,8 @@
                 this.addMember()
             },
             addMember() {
-                if (!this.checkFormValidity()) {
+                this.form.invalid = !this.$refs.addProjectForm.checkValidity()
+                if (this.form.invalid) {
                     return
                 }
                 this.axios.post('/web/member/add', {
