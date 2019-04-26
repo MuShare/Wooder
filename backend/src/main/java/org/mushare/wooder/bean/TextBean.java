@@ -16,6 +16,8 @@ public class TextBean extends BaseBean {
     private List<String> platforms;
     private List<TextContentBean> contents;
 
+    public TextBean() {}
+
     public TextBean(Text text) {
         this.id = text.getId();
         this.createdAt = new Date(text.getCreatedAt());
@@ -30,6 +32,16 @@ public class TextBean extends BaseBean {
             this.platforms.add("ios");
         }
         this.contents = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        return "TextBean{" +
+                "identifier='" + identifier + '\'' +
+                ", name='" + name + '\'' +
+                ", platforms=" + platforms +
+                ", contents=" + contents +
+                '}';
     }
 
 }

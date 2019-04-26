@@ -8,10 +8,7 @@ import org.mushare.wooder.controller.common.Response;
 import org.mushare.wooder.service.common.Result;
 import org.mushare.wooder.service.common.ResultCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -39,11 +36,15 @@ public class TextController extends BaseController {
         });
     }
 
-    @RequestMapping(value = "/{textId}/edit", method = RequestMethod.POST)
-    public ResponseEntity editText(@PathVariable String textId, HttpServletRequest request) {
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public ResponseEntity editText(@RequestBody TextBean textBean, HttpServletRequest request) {
+        System.out.println(textBean);
         return authMember(request, memberId -> {
-
-            return Response.ok().build();
+            Result result = textManager.edit(textBean, memberId);
+            if (result.hasError()) {
+                return result.errorMapping(null);
+            }
+            return Response.success().build();
         });
     }
 

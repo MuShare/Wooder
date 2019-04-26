@@ -11,6 +11,7 @@ import org.mushare.wooder.service.common.ResultList;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +61,35 @@ public class TextManagerImpl extends BaseManager implements TextManager {
                 return new TextContentBean(content);
             }).collect(Collectors.toList()));
             return Result.data(textBean);
+        });
+    }
+
+    @Override
+    public Result edit(TextBean textBean, String memberId) {
+        return authText(textBean.getId(), memberId, text -> {
+            long now = System.currentTimeMillis();
+            text.setIdentifer(textBean.getIdentifier());
+            text.setName(textBean.getName());
+            text.setAndroid(textBean.getPlatforms().contains("android"));
+            text.setIos(textBean.getPlatforms().contains("ios"));
+            text.setUpdatedAt(now);
+            textDao.save(text);
+            Map<String, String> contents = textBean.getContents().stream()
+                    .collect(Collectors.toMap(TextContentBean::getId, TextContentBean::getString));
+            textContentDao.findByTextOrderByLanguage(text).forEach(content -> {
+                if (!contents.keySet().contains(content.getId())) {
+                    return;
+                }
+                String string = contents.get(content.getId());
+                // If the new string is null or equals to the old string, skip it.
+                if (string == null || content.getString().equals(string)) {
+                    return;
+                }
+                content.setString(string);
+                content.setUpdatedAt(now);
+                textContentDao.save(content);
+            });
+            return Result.success();
         });
     }
 

@@ -12,6 +12,8 @@ public class LanguageBean extends BaseBean {
     private String identifier;
     private String name;
 
+    public LanguageBean() {}
+
     public LanguageBean(Language language) {
         this.id = language.getId();
         this.createdAt = new Date(language.getCreatedAt());

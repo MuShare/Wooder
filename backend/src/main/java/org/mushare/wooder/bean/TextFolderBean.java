@@ -12,6 +12,8 @@ public class TextFolderBean extends BaseBean {
     private String name;
     private ProjectBean project;
 
+    public TextFolderBean() {}
+
     public TextFolderBean(TextFolder textFolder, boolean withProject) {
         this.id = textFolder.getId();
         this.createdAt = new Date(textFolder.getCreatedAt());

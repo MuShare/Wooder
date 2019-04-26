@@ -30,9 +30,9 @@
                 </b-form-group>
                 <b-form-group v-for="content in editingText.contents" :key="content.id"
                               :label="content.language.identifier + ', ' + content.language.name" class="text-left">
-                    <b-form-input type="text"></b-form-input>
+                    <b-form-input type="text" v-model="content.string"></b-form-input>
                 </b-form-group>
-                <b-button block variant="outline-success" size="lg">Save Text</b-button>
+                <b-button block variant="outline-success" size="lg" @click="saveEditingText">Save Text</b-button>
             </b-col>
         </b-row>
     </div>
@@ -138,6 +138,30 @@
                 this.axios.get('/web/text/' + textId).then(response => {
                     if (response && response.status == 200) {
                         this.editingText = response.data.result.text
+                    }
+                }).catch(error => {
+                    if (error.response) {
+                        alert(error.response.data.message)
+                    }
+                })
+            },
+            saveEditingText() {
+                this.axios({
+                    method: 'post',
+                    url: '/web/text/edit',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    transformRequest: (data) => {
+                        return data
+                    },
+                    data: JSON.stringify(this.editingText)
+                }).then(response => {
+                    if (response && response.status == 200) {
+                        this.$bvToast.toast(this.editingText.identifier + ' has been saved successfully!', {
+                            title: 'Tip',
+                            autoHideDelay: 2000
+                        })
                     }
                 }).catch(error => {
                     if (error.response) {

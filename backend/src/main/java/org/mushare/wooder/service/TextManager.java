@@ -12,4 +12,6 @@ public interface TextManager {
 
     Result<TextBean> getByTextId(String textId, String memberId);
 
+    Result edit(TextBean textBean, String memberId);
+
 }

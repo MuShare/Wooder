@@ -11,6 +11,8 @@ public class ProjectBean extends BaseBean {
 
     private String name;
 
+    public ProjectBean() {}
+
     public ProjectBean(Project project) {
         this.id = project.getId();
         this.createdAt = new Date(project.getCreatedAt());

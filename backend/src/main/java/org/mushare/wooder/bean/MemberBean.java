@@ -13,6 +13,8 @@ public class MemberBean extends BaseBean {
     private String name;
     private GroupBean group;
 
+    public MemberBean() {}
+
     public MemberBean(Member member) {
         this.id = member.getId();
         this.createdAt = new Date(member.getCreatedAt());

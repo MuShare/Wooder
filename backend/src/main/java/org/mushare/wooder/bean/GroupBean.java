@@ -12,6 +12,8 @@ public class GroupBean extends BaseBean {
     private String email;
     private String name;
 
+    public GroupBean() {}
+
     public GroupBean(Group group) {
         this.id = group.getId();
         this.createdAt = new Date(group.getCreatedAt());
