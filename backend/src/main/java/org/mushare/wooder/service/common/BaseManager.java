@@ -28,6 +28,9 @@ public class BaseManager {
     protected TextDao textDao;
 
     @Autowired
+    protected TextContentDao textContentDao;
+
+    @Autowired
     protected LanguageDao languageDao;
 
     protected String uuid() {

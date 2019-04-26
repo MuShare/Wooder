@@ -5,7 +5,7 @@
             <b-col cols="4">
                 <b-list-group>
                     <b-list-group-item v-for="text in texts" :key="text.id">
-                        {{ text.name }}
+                        {{ text.identifier }}
                     </b-list-group-item>
                 </b-list-group>
                 <br>
@@ -13,7 +13,7 @@
                     <b-button block variant="light" size="lg" v-b-modal.add-text>Add Text</b-button>
                     <b-modal id="add-text" ref="addText" title="New Text" @ok="addText">
                         <b-form-group label-cols-sm="4" label-cols-lg="3" label="Identifier" label-for="text-identifier">
-                            <b-form-input id="text-identifier" v-model="textForm.identifier"></b-form-input>
+                            <b-form-input id="text-identifier" v-model="textForm.identifier" :state="validation"></b-form-input>
                         </b-form-group>
                     </b-modal>
                 </div>
@@ -40,11 +40,24 @@
                 ],
                 texts: [],
                 textForm: {
-                    identifier: ''
+                    identifier: '',
+                    reset() {
+                        this.identifier = ''
+                    }
                 }
             }
-        }, mounted() {
-            this.axios.get('/web/textfolder/' + this.$route.params.textfolderId).then(response => {
+        },
+        computed: {
+            validation() {
+                const identifier = this.textForm.identifier
+                return identifier != '' && !identifier.includes(' ')
+            },
+            textfolderId() {
+                return this.$route.params.textfolderId
+            }
+        },
+        mounted() {
+            this.axios.get('/web/textfolder/' + this.textfolderId).then(response => {
                 if (response && response.status == 200) {
                     const textfolder = response.data.result.textfolder
                     this.items[1].text = textfolder.project.name
@@ -56,13 +69,41 @@
                     alert(error.response.data.message)
                 }
             })
+
+            this.loadTexts()
         },
         methods: {
             loadTexts() {
-
+                this.axios.get('/web/textfolder/' + this.textfolderId + '/text/list').then(response => {
+                    if (response && response.status == 200) {
+                        this.texts = response.data.result.texts
+                    }
+                }).catch(error => {
+                    if (error.response) {
+                        alert(error.response.data.message)
+                    }
+                })
             },
-            addText() {
+            addText(event) {
+                event.preventDefault()
 
+                if (!this.validation) {
+                    return
+                }
+
+                this.axios.post('/web/textfolder/' + this.textfolderId + '/text/add', {
+                    identifier: this.textForm.identifier
+                }).then(response => {
+                    if (response && response.status == 200) {
+                        this.$refs.addText.hide()
+                        this.loadTexts()
+                        this.textForm.reset()
+                    }
+                }).catch(error => {
+                    if (error.response) {
+                        alert(error.response.data.message)
+                    }
+                })
             }
         }
     }

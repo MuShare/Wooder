@@ -23,6 +23,7 @@ public class TextManagerImpl extends BaseManager implements TextManager {
             text.setName("");
             text.setAndroid(true);
             text.setIos(true);
+            text.setFolder(textFolder);
             textDao.save(text);
             return Result.success();
         });

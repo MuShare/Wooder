@@ -30,6 +30,9 @@ public class BaseController {
     protected TextManager textManager;
 
     @Autowired
+    protected TextContentManager textContentManager;
+
+    @Autowired
     protected LanguageManager languageManager;
 
     protected String token(HttpServletRequest request) {
