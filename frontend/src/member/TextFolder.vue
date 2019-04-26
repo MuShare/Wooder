@@ -20,13 +20,17 @@
             </b-col>
             <b-col cols="8">
                 <b-form-group label="Text Identifier" label-for="text-identifier" class="text-left">
-                    <b-form-input id="text-identifier" v-model="editingText.identifier" :state="identifierValidation"></b-form-input>
+                    <b-form-input id="text-identifier" type="text" v-model="editingText.identifier" :state="identifierValidation"></b-form-input>
                 </b-form-group>
                 <b-form-group label="Text Name" label-for="text-name" class="text-left">
-                    <b-form-input id="text-name" v-model="editingText.name" :state="nameValidation"></b-form-input>
+                    <b-form-input id="text-name" type="text" v-model="editingText.name"></b-form-input>
                 </b-form-group>
                 <b-form-group label="Supported Platforms" class="text-left">
                     <b-form-checkbox-group v-model="editingText.platforms" :options="options" switches></b-form-checkbox-group>
+                </b-form-group>
+                <b-form-group v-for="content in editingText.contents" :key="content.id"
+                              :label="content.language.identifier + ', ' + content.language.name" class="text-left">
+                    <b-form-input type="text"></b-form-input>
                 </b-form-group>
                 <b-button block variant="outline-success" size="lg">Save Text</b-button>
             </b-col>
@@ -79,9 +83,6 @@
             identifierValidation() {
                 const identifier = this.editingText.identifier
                 return identifier != '' && !identifier.includes(' ')
-            },
-            nameValidation() {
-                return true
             }
         },
         mounted() {
@@ -134,7 +135,6 @@
                 })
             },
             editText(textId) {
-                console.log(textId)
                 this.axios.get('/web/text/' + textId).then(response => {
                     if (response && response.status == 200) {
                         this.editingText = response.data.result.text

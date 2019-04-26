@@ -33,7 +33,6 @@ public class TextController extends BaseController {
             if (result.hasError()) {
                 return result.errorMapping(TextAccessErrorMap);
             }
-            System.out.println(result.getData());
             return Response.ok()
                     .append("text", result.getData())
                     .build();

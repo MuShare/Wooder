@@ -14,6 +14,7 @@ public class TextBean extends BaseBean {
     private String identifier;
     private String name;
     private List<String> platforms;
+    private List<TextContentBean> contents;
 
     public TextBean(Text text) {
         this.id = text.getId();
@@ -28,6 +29,7 @@ public class TextBean extends BaseBean {
         if (text.getIos()) {
             this.platforms.add("ios");
         }
+        this.contents = new ArrayList<>();
     }
 
 }

@@ -30,10 +30,10 @@
                     <b-modal id="add-language" ref="addLanguage" title="New Language" @ok="addLanguage">
                         <form ref="addLanguageForm">
                             <b-form-group label-cols-sm="4" label-cols-lg="3" label="Identifier" label-for="folder-name">
-                                <b-form-input id="language-identifier" type="text" v-model="languageForm.name"></b-form-input>
+                                <b-form-input id="language-identifier" type="text" v-model="languageForm.identifier"></b-form-input>
                             </b-form-group>
                             <b-form-group label-cols-sm="4" label-cols-lg="3" label="Language Name" label-for="folder-name">
-                                <b-form-input id="language-name" type="text" v-model="languageForm.identifier"></b-form-input>
+                                <b-form-input id="language-name" type="text" v-model="languageForm.name"></b-form-input>
                             </b-form-group>
                         </form>
                         <b-alert v-model="languageForm.invalid" variant="danger" dismissible>

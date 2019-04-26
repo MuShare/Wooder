@@ -53,7 +53,7 @@ public class BaseManager {
         return authed.apply(project.get());
     }
 
-    protected <T> Result<T> authTextFolder(String textfolderId, String memberId, Function<TextFolder, Result<T>> authed) {
+    protected Result authTextFolder(String textfolderId, String memberId, Function<TextFolder, Result> authed) {
         Optional<TextFolder> textFolder = textFolderDao.findById(textfolderId);
         if (!textFolder.isPresent()) {
             return Result.error(ResultCode.TextFolderIdError);

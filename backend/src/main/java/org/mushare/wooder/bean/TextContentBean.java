@@ -10,11 +10,14 @@ import java.util.Date;
 public class TextContentBean extends BaseBean {
 
     private String string;
+    private LanguageBean language;
 
     public TextContentBean(TextContent content) {
         this.id = content.getId();
         this.createdAt = new Date(content.getCreatedAt());
         this.updatedAt = new Date(content.getUpdatedAt());
         this.string = content.getString();
+        this.language = new LanguageBean(content.getLanguage());
     }
+
 }
