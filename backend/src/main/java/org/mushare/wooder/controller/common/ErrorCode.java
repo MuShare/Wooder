@@ -26,7 +26,10 @@ public enum ErrorCode {
     ProjectIdNotExist(3001, "Project id is not existing."),
 
     //TextFolderController
-    TextFolderIdNotExist(4001, "Text folder id is not existing.");
+    TextFolderIdNotExist(4001, "Text folder id is not existing."),
+
+    //TextController
+    TextIdNotExist(5001, "Text id is not existing.");
 
     public int code;
     public String message;

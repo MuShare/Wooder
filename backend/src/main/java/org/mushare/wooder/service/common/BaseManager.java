@@ -3,6 +3,7 @@ package org.mushare.wooder.service.common;
 import org.mushare.wooder.dao.*;
 import org.mushare.wooder.domain.Member;
 import org.mushare.wooder.domain.Project;
+import org.mushare.wooder.domain.Text;
 import org.mushare.wooder.domain.TextFolder;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -52,7 +53,7 @@ public class BaseManager {
         return authed.apply(project.get());
     }
 
-    protected Result authTextFolder(String textfolderId, String memberId, Function<TextFolder, Result> authed) {
+    protected <T> Result<T> authTextFolder(String textfolderId, String memberId, Function<TextFolder, Result<T>> authed) {
         Optional<TextFolder> textFolder = textFolderDao.findById(textfolderId);
         if (!textFolder.isPresent()) {
             return Result.error(ResultCode.TextFolderIdError);
@@ -66,6 +67,22 @@ public class BaseManager {
             return Result.error(ResultCode.NoPrivilege);
         }
         return authed.apply(textFolder.get());
+    }
+
+    protected <T> Result<T> authText(String textId, String memberId, Function<Text, Result<T>> authed) {
+        Optional<Text> text = textDao.findById(textId);
+        if (!text.isPresent()) {
+            return Result.error(ResultCode.TextIdError);
+        }
+        Optional<Member> member = memberDao.findById(memberId);
+        if (!member.isPresent()) {
+            return Result.error(ResultCode.MemberIdError);
+        }
+        Project project = text.get().getFolder().getProject();
+        if (!projectDao.findByGroupOrderByCreatedAt(member.get().getGroup()).contains(project)) {
+            return Result.error(ResultCode.NoPrivilege);
+        }
+        return authed.apply(text.get());
     }
 
 }

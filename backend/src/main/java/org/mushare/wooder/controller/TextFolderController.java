@@ -19,7 +19,7 @@ import java.util.Map;
 @RequestMapping(value = "/web/textfolder")
 public class TextFolderController extends BaseController {
 
-    private final static Map TextFoldertAccessErrorMap = ImmutableMap.of(
+    private final static Map TextFolderAccessErrorMap = ImmutableMap.of(
             ResultCode.TextFolderIdError, ErrorCode.TextFolderIdNotExist,
             ResultCode.MemberIdError, ErrorCode.MemberIdNotExist,
             ResultCode.NoPrivilege, ErrorCode.ErrorNoPrivilge
@@ -30,7 +30,7 @@ public class TextFolderController extends BaseController {
         return authMember(request, memberId -> {
             Result<TextFolderBean> result = textFolderManager.textfolderInfo(textfolderId, memberId);
             if (result.hasError()) {
-                return result.errorMapping(TextFoldertAccessErrorMap);
+                return result.errorMapping(TextFolderAccessErrorMap);
             }
             return Response.ok()
                     .append("textfolder", result.getData())
@@ -43,7 +43,7 @@ public class TextFolderController extends BaseController {
         return authMember(request, memberId -> {
             Result result = textManager.add(identifier, textfolderId, memberId);
             if (result.hasError()) {
-                return result.errorMapping(TextFoldertAccessErrorMap);
+                return result.errorMapping(TextFolderAccessErrorMap);
             }
             return Response.success().build();
         });
@@ -54,7 +54,7 @@ public class TextFolderController extends BaseController {
         return authMember(request, memberId -> {
             ResultList<TextBean> result = textManager.getTextsByTextfolderId(textfolderId, memberId);
             if (result.hasError()) {
-                return result.errorMapping(TextFoldertAccessErrorMap);
+                return result.errorMapping(TextFolderAccessErrorMap);
             }
             return Response.success()
                     .append("texts", result.getData())

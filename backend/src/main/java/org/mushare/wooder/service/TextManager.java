@@ -10,4 +10,6 @@ public interface TextManager {
 
     ResultList<TextBean> getTextsByTextfolderId(String textfolderId, String memberId);
 
+    Result<TextBean> getByTextId(String textId, String memberId);
+
 }

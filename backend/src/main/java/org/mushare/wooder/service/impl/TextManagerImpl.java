@@ -38,4 +38,11 @@ public class TextManagerImpl extends BaseManager implements TextManager {
         });
     }
 
+    @Override
+    public Result<TextBean> getByTextId(String textId, String memberId) {
+        return authText(textId, memberId, text -> {
+            return Result.data(new TextBean(text));
+        });
+    }
+
 }

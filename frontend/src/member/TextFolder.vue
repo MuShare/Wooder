@@ -4,7 +4,7 @@
         <b-row>
             <b-col cols="4">
                 <b-list-group>
-                    <b-list-group-item v-for="text in texts" :key="text.id">
+                    <b-list-group-item v-for="text in texts" :key="text.id" href="#" @click="editText(text.id)">
                         {{ text.identifier }}
                     </b-list-group-item>
                 </b-list-group>
@@ -12,13 +12,24 @@
                 <div>
                     <b-button block variant="light" size="lg" v-b-modal.add-text>Add Text</b-button>
                     <b-modal id="add-text" ref="addText" title="New Text" @ok="addText">
-                        <b-form-group label-cols-sm="4" label-cols-lg="3" label="Identifier" label-for="text-identifier">
-                            <b-form-input id="text-identifier" v-model="textForm.identifier" :state="validation"></b-form-input>
+                        <b-form-group label-cols-sm="4" label-cols-lg="3" label="Identifier" label-for="add-text-identifier">
+                            <b-form-input id="add-text-identifier" v-model="textForm.identifier" :state="validation"></b-form-input>
                         </b-form-group>
                     </b-modal>
                 </div>
             </b-col>
-            <b-col cols="8"></b-col>
+            <b-col cols="8">
+                <b-form-group label="Text Identifier" label-for="text-identifier" class="text-left">
+                    <b-form-input id="text-identifier" v-model="editingText.identifier" :state="identifierValidation"></b-form-input>
+                </b-form-group>
+                <b-form-group label="Text Name" label-for="text-name" class="text-left">
+                    <b-form-input id="text-name" v-model="editingText.name" :state="nameValidation"></b-form-input>
+                </b-form-group>
+                <b-form-group label="Supported Platforms" class="text-left">
+                    <b-form-checkbox-group v-model="editingText.platforms" :options="options" switches></b-form-checkbox-group>
+                </b-form-group>
+                <b-button block variant="outline-success" size="lg">Save Text</b-button>
+            </b-col>
         </b-row>
     </div>
 </template>
@@ -44,7 +55,17 @@
                     reset() {
                         this.identifier = ''
                     }
-                }
+                },
+                editingText: {
+                    identifier: '',
+                    name: '',
+                    platforms: ['android', 'ios']
+                },
+                options: [
+                    { text: 'Android', value: 'android' },
+                    { text: 'iOS', value: 'ios' }
+                ]
+
             }
         },
         computed: {
@@ -54,6 +75,13 @@
             },
             textfolderId() {
                 return this.$route.params.textfolderId
+            },
+            identifierValidation() {
+                const identifier = this.editingText.identifier
+                return identifier != '' && !identifier.includes(' ')
+            },
+            nameValidation() {
+                return true
             }
         },
         mounted() {
@@ -98,6 +126,18 @@
                         this.$refs.addText.hide()
                         this.loadTexts()
                         this.textForm.reset()
+                    }
+                }).catch(error => {
+                    if (error.response) {
+                        alert(error.response.data.message)
+                    }
+                })
+            },
+            editText(textId) {
+                console.log(textId)
+                this.axios.get('/web/text/' + textId).then(response => {
+                    if (response && response.status == 200) {
+                        this.editingText = response.data.result.text
                     }
                 }).catch(error => {
                     if (error.response) {
