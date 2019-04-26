@@ -1,17 +1,16 @@
 package org.mushare.wooder.controller;
 
 import com.google.common.collect.ImmutableMap;
+import org.mushare.wooder.bean.TextBean;
 import org.mushare.wooder.bean.TextFolderBean;
 import org.mushare.wooder.controller.common.BaseController;
 import org.mushare.wooder.controller.common.ErrorCode;
 import org.mushare.wooder.controller.common.Response;
 import org.mushare.wooder.service.common.Result;
 import org.mushare.wooder.service.common.ResultCode;
+import org.mushare.wooder.service.common.ResultList;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -35,6 +34,30 @@ public class TextFolderController extends BaseController {
             }
             return Response.ok()
                     .append("textfolder", result.getData())
+                    .build();
+        });
+    }
+
+    @RequestMapping(value = "/{textfolderId}/text/add", method = RequestMethod.POST)
+    public ResponseEntity addText(@PathVariable String textfolderId, @RequestParam String identifier, HttpServletRequest request) {
+        return authMember(request, memberId -> {
+            Result result = textManager.add(identifier, textfolderId, memberId);
+            if (result.hasError()) {
+                return result.errorMapping(TextFoldertAccessErrorMap);
+            }
+            return Response.success().build();
+        });
+    }
+
+    @RequestMapping(value = "/{textfolderId}/text/list", method = RequestMethod.GET)
+    public ResponseEntity addText(@PathVariable String textfolderId, HttpServletRequest request) {
+        return authMember(request, memberId -> {
+            ResultList<TextBean> result = textManager.getTextsByTextfolderId(textfolderId, memberId);
+            if (result.hasError()) {
+                return result.errorMapping(TextFoldertAccessErrorMap);
+            }
+            return Response.success()
+                    .append("texts", result.getData())
                     .build();
         });
     }

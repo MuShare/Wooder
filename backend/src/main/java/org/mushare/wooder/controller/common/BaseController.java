@@ -27,6 +27,9 @@ public class BaseController {
     protected TextFolderManager textFolderManager;
 
     @Autowired
+    protected TextManager textManager;
+
+    @Autowired
     protected LanguageManager languageManager;
 
     protected String token(HttpServletRequest request) {

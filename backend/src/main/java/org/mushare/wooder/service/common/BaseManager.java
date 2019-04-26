@@ -25,6 +25,9 @@ public class BaseManager {
     protected TextFolderDao textFolderDao;
 
     @Autowired
+    protected TextDao textDao;
+
+    @Autowired
     protected LanguageDao languageDao;
 
     protected String uuid() {

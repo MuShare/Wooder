@@ -1,11 +1,13 @@
 package org.mushare.wooder.domain;
 
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Data
 @Entity
 @Table(name = "wooder_text")
 public class Text implements Serializable {
