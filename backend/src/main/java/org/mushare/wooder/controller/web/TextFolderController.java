@@ -1,4 +1,4 @@
-package org.mushare.wooder.controller;
+package org.mushare.wooder.controller.web;
 
 import com.google.common.collect.ImmutableMap;
 import org.mushare.wooder.bean.TextBean;
