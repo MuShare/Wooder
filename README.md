@@ -1,4 +1,4 @@
-# Wooder [![Build Status](https://travis-ci.org/lm2343635/Wooder.svg?branch=master)](https://travis-ci.org/lm2343635/Wooder)
+# Wooder [![Build Status](https://travis-ci.org/MuShare/Wooder.svg?branch=master)](https://travis-ci.org/MuShare/Wooder)
 
 Wooder is an i18n resource management system for mobile application development.
 Without Wooder, the project managers, designers and developers should manage the i18n resources include strings and icons manually.
