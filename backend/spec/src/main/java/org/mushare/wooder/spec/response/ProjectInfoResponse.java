@@ -14,4 +14,5 @@ public class ProjectInfoResponse {
   private String createdByUserName;
   private long groupId;
   private String groupName;
+
 }

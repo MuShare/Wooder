@@ -4,18 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mushare.wooder.server.repository.LanguageRepository;
+import org.mushare.wooder.server.repository.TextContentDto;
 import org.mushare.wooder.server.repository.TextContentRepository;
 import org.mushare.wooder.server.repository.TextDto;
+import org.mushare.wooder.server.repository.TextFolderDto;
 import org.mushare.wooder.server.repository.TextRepository;
 import org.mushare.wooder.spec.request.TextRequest;
 import org.mushare.wooder.spec.request.TextRequest.TextContentRequest;
 import org.mushare.wooder.spec.response.LanguageInfoResponse;
 import org.mushare.wooder.spec.response.OperationResponse;
+import org.mushare.wooder.spec.response.TextListResponse;
 import org.mushare.wooder.spec.response.TextResponse;
 import org.mushare.wooder.spec.response.TextResponse.TextContent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +34,10 @@ public class TextService {
 
   TextRepository textRepository;
   TextContentRepository textContentRepository;
+  EntityManager entityManager;
+  LanguageRepository languageRepository;
 
-  public TextResponse getText(long textId) {
+  public TextResponse getTextByTextId(long textId) {
     return textRepository.findById(textId)
         .map(textDto ->
             TextResponse
@@ -55,6 +64,37 @@ public class TextService {
         ).orElse(TextResponse.builder().build());
   }
 
+  public TextListResponse getTextByTextfolderId(long textFolderId, int pageNumber, int pageSize) {
+    Page<TextDto> textDtos = textRepository
+        .findByTextFolderDtoId(textFolderId, PageRequest.of(pageNumber, pageSize));
+    return TextListResponse
+        .builder()
+        .totalCount(textDtos.getTotalElements())
+        .textResponses(textDtos.get().map(textDto -> TextResponse
+            .builder()
+            .id(textDto.getId())
+            .identifier(textDto.getIdentifier())
+            .name(textDto.getName())
+            .platforms(getPlatforms(textDto))
+            .textContents(textContentRepository
+                .findByTextIdOrderByLanguageDto(textDto.getId()).stream()
+                .map(textContentDto -> TextContent.builder()
+                    .createTime(textContentDto.getCreateTime())
+                    .updateTime(textContentDto.getUpdateTime())
+                    .id(textContentDto.getId())
+                    .languageInfoResponse(LanguageInfoResponse.builder()
+                        .identifier(textContentDto.getLanguageDto().getIdentifier())
+                        .name(textContentDto.getLanguageDto().getName())
+                        .build())
+                    .string(textContentDto.getString())
+                    .build()
+                ).collect(Collectors.toList())
+            )
+            .build())
+            .collect(Collectors.toList()))
+        .build();
+  }
+
   public OperationResponse editText(TextRequest textRequest) {
     return textRepository.findById(textRequest.getId())
         .map(textDto -> {
@@ -79,10 +119,31 @@ public class TextService {
         }).orElse(OperationResponse.builder().succeed(false).build());
   }
 
-  public OperationResponse createText(String identifier, String textFolderId){
-    return null;
+  public OperationResponse createText(String identifier, long textFolderId) {
+    TextDto textDto = TextDto.builder()
+        .createTime(System.currentTimeMillis())
+        .updateTime(System.currentTimeMillis())
+        .identifier(identifier)
+        .name("")
+        .android(true)
+        .ios(true)
+        .textFolderDto(entityManager.getReference(TextFolderDto.class, textFolderId))
+        .build();
+    textRepository.save(textDto);
+    List<TextContentDto> textContentDtos = languageRepository
+        .findByProjectDtoId(textDto.getTextFolderDto().getProjectDto().getId(),
+            PageRequest.of(0, Integer.MAX_VALUE)).stream()
+        .map(languageDto -> TextContentDto.builder()
+            .createTime(System.currentTimeMillis())
+            .updateTime(System.currentTimeMillis())
+            .languageDto(languageDto)
+            .string("")
+            .text(textDto)
+            .build())
+        .collect(Collectors.toList());
+    textContentRepository.saveAll(textContentDtos);
+    return OperationResponse.builder().succeed(true).build();
   }
-
 
   private List<String> getPlatforms(TextDto textDto) {
     List<String> platforms = new ArrayList<>();

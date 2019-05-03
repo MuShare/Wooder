@@ -22,12 +22,12 @@ public class TextController {
 
   @RequestMapping(value = "/{textId}", method = RequestMethod.GET)
   public TextResponse getText(@PathVariable long textId) {
-    return textService.getText(textId);
+    return textService.getTextByTextId(textId);
   }
 
   @RequestMapping(value = "/edit", method = RequestMethod.POST)
   public OperationResponse editText(@RequestBody TextRequest textReqeust) {
-
-    return null;
+    return textService.editText(textReqeust);
   }
+
 }
