@@ -38,10 +38,10 @@ public class SecurityService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    UserDto userDto = userRepository.findByUsername(username);
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    UserDto userDto = userRepository.findByEmail(email);
     if (userDto == null) {
-      throw new UsernameNotFoundException(username);
+      throw new UsernameNotFoundException(email);
     }
     return new User(String.valueOf(userDto.getId()), userDto.getPassword(),
         userDto.getAuthorities());

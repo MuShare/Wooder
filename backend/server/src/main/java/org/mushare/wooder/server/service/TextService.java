@@ -39,29 +39,7 @@ public class TextService {
 
   public TextResponse getTextByTextId(long textId) {
     return textRepository.findById(textId)
-        .map(textDto ->
-            TextResponse
-                .builder()
-                .id(textDto.getId())
-                .identifier(textDto.getIdentifier())
-                .name(textDto.getName())
-                .platforms(getPlatforms(textDto))
-                .textContents(textContentRepository
-                    .findByTextIdOrderByLanguageDto(textDto.getId()).stream()
-                    .map(textContentDto -> TextContent.builder()
-                        .createTime(textContentDto.getCreateTime())
-                        .updateTime(textContentDto.getUpdateTime())
-                        .id(textContentDto.getId())
-                        .languageInfoResponse(LanguageInfoResponse.builder()
-                            .identifier(textContentDto.getLanguageDto().getIdentifier())
-                            .name(textContentDto.getLanguageDto().getName())
-                            .build())
-                        .string(textContentDto.getString())
-                        .build()
-                    ).collect(Collectors.toList())
-                )
-                .build()
-        ).orElse(TextResponse.builder().build());
+        .map(this::toTextResponse).orElse(TextResponse.builder().build());
   }
 
   public TextListResponse getTextByTextfolderId(long textFolderId, int pageNumber, int pageSize) {
@@ -70,28 +48,32 @@ public class TextService {
     return TextListResponse
         .builder()
         .totalCount(textDtos.getTotalElements())
-        .textResponses(textDtos.get().map(textDto -> TextResponse
-            .builder()
-            .id(textDto.getId())
-            .identifier(textDto.getIdentifier())
-            .name(textDto.getName())
-            .platforms(getPlatforms(textDto))
-            .textContents(textContentRepository
-                .findByTextIdOrderByLanguageDto(textDto.getId()).stream()
-                .map(textContentDto -> TextContent.builder()
-                    .createTime(textContentDto.getCreateTime())
-                    .updateTime(textContentDto.getUpdateTime())
-                    .id(textContentDto.getId())
-                    .languageInfoResponse(LanguageInfoResponse.builder()
-                        .identifier(textContentDto.getLanguageDto().getIdentifier())
-                        .name(textContentDto.getLanguageDto().getName())
-                        .build())
-                    .string(textContentDto.getString())
-                    .build()
-                ).collect(Collectors.toList())
-            )
-            .build())
+        .textResponses(textDtos.get().map(this::toTextResponse)
             .collect(Collectors.toList()))
+        .build();
+  }
+
+  private TextResponse toTextResponse(TextDto textDto) {
+    return TextResponse
+        .builder()
+        .id(textDto.getId())
+        .identifier(textDto.getIdentifier())
+        .name(textDto.getName())
+        .platforms(getPlatforms(textDto))
+        .textContents(textContentRepository
+            .findByTextIdOrderByLanguageDto(textDto.getId()).stream()
+            .map(textContentDto -> TextContent.builder()
+                .createTime(textContentDto.getCreateTime())
+                .updateTime(textContentDto.getUpdateTime())
+                .id(textContentDto.getId())
+                .languageInfoResponse(LanguageInfoResponse.builder()
+                    .identifier(textContentDto.getLanguageDto().getIdentifier())
+                    .name(textContentDto.getLanguageDto().getName())
+                    .build())
+                .string(textContentDto.getString())
+                .build()
+            ).collect(Collectors.toList())
+        )
         .build();
   }
 

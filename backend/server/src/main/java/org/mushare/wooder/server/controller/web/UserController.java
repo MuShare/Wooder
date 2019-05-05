@@ -1,4 +1,4 @@
-package org.mushare.wooder.server.controller;
+package org.mushare.wooder.server.controller.web;
 
 import lombok.AllArgsConstructor;
 import org.mushare.wooder.server.service.UserService;

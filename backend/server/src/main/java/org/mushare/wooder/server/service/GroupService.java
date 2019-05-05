@@ -26,7 +26,7 @@ public class GroupService {
       GroupDto groupDto = groupRepository.save(GroupDto.builder()
           .name(groupRequest.getName())
           .description(groupRequest.getDescription())
-          .createdBy(securityService.getCurrentUser())
+          .createdByUserDto(securityService.getCurrentUser())
           .createdAt(System.currentTimeMillis())
           .updatedAt(System.currentTimeMillis())
           .build()
@@ -53,8 +53,8 @@ public class GroupService {
             .name(groupDto.getName())
             .createdTime(groupDto.getCreatedAt())
             .updatedTime(groupDto.getUpdatedAt())
-            .createdUserId(groupDto.getCreatedBy().getId())
-            .createdUsername(groupDto.getCreatedBy().getUsername())
+            .createdUserId(groupDto.getCreatedByUserDto().getId())
+            .createdUsername(groupDto.getCreatedByUserDto().getUsername())
             .build())
         .orElse(GroupInfoResponse.builder().build());
   }

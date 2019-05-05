@@ -50,7 +50,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             .getSubject();
 
         Token token = Utils.mapper.readValue(sub, Token.class);
-        return new UsernamePasswordAuthenticationToken(token.getUserId(), null,
+        return new UsernamePasswordAuthenticationToken(token.getEmail(), null,
             token.getAuthorities().stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList()));
 
