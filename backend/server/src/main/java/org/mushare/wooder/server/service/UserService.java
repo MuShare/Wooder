@@ -25,12 +25,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@Transactional
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
 
   private UserRepository userRepository;
   private AuthorityRepository authorityRepository;
   private BCryptPasswordEncoder bCryptPasswordEncoder;
+  private SecurityService securityService;
 
   public UserResponse getAllUsers() {
     return UserResponse
@@ -43,8 +45,16 @@ public class UserService {
     return UserItem
         .builder()
         .username(userDto.getUsername())
-        .password(userDto.getPassword())
+        .createTime(userDto.getCreateTime())
+        .updateTime(userDto.getUpdateTime())
+        .email(userDto.getEmail())
+        .groupName(userDto.getGroupDto() == null ? null : userDto.getGroupDto().getName())
         .build();
+  }
+
+  public UserItem currentUser() throws Exception {
+    UserDto userDto = securityService.getCurrentUser();
+    return toUserItem(userDto);
   }
 
   public OperationResponse createUser(UserRequest userRequest) {
@@ -63,8 +73,8 @@ public class UserService {
                 .password(bCryptPasswordEncoder.encode(userRequest.getPassword()))
                 .authorities(authorities)
                 .email(userRequest.getEmail())
-                .createdAt(System.currentTimeMillis())
-                .updatedAt(System.currentTimeMillis())
+                .createTime(System.currentTimeMillis())
+                .updateTime(System.currentTimeMillis())
                 .build());
         return OperationResponse.builder().succeed(true).build();
       } catch (Exception ex) {
@@ -76,7 +86,6 @@ public class UserService {
     }
   }
 
-  @Transactional
   public GroupUserListResponse getGroupUserList(long groupId, int pageNumber, int pageSize) {
     Page<UserDto> userDtoPage = userRepository
         .findByGroupDtoId(groupId, PageRequest.of(pageNumber, pageSize));
@@ -86,8 +95,8 @@ public class UserService {
             .builder()
             .id(userDto.getId())
             .email(userDto.getEmail())
-            .updateTime(userDto.getUpdatedAt())
-            .createTime(userDto.getCreatedAt())
+            .updateTime(userDto.getUpdateTime())
+            .createTime(userDto.getCreateTime())
             .build())
             .collect(Collectors.toList()))
         .build();

@@ -64,7 +64,7 @@ public class SecurityService implements UserDetailsService {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (!(authentication instanceof AnonymousAuthenticationToken)) {
       UserDto userDto = userRepository.findByEmail(authentication.getName());
-      if(userDto != null){
+      if (userDto != null) {
         return userDto.getId();
       }
       log.error("User not exist");

@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 @Data
 public class TextListResponse {
+
   private long totalCount;
   private List<TextResponse> textResponses;
 }

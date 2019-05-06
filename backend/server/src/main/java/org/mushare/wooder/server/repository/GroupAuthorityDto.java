@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class GroupAuthorityDto {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

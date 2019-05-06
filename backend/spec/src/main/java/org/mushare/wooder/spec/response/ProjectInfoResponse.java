@@ -6,6 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class ProjectInfoResponse {
+
   private String name;
   private long id;
   private long createTime;

@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TextRepository extends JpaRepository<TextDto, Long> {
+
   Page<TextDto> findByTextFolderDtoId(long textFolderId, Pageable pageable);
 }

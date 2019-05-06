@@ -15,6 +15,9 @@ public class UserResponse {
   public static class UserItem {
 
     private String username;
-    private String password;
+    private long createTime;
+    private long updateTime;
+    private String email;
+    private String groupName;
   }
 }

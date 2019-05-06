@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 @Data
 public class ProjectInfoListResponse {
+
   private long totalCount;
   private List<ProjectInfoResponse> projectInfoResponses;
 }

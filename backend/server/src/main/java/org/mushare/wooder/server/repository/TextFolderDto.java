@@ -1,6 +1,5 @@
 package org.mushare.wooder.server.repository;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TextFolderDto implements Serializable {
+public class TextFolderDto {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

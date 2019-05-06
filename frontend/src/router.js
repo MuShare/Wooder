@@ -1,57 +1,47 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import MemberLogin from '@/components/Login.vue'
-import SessionOut from '@/components/SessionOut'
+import Vue from "vue";
+import Router from "vue-router";
+import MemberLogin from "@/components/Login.vue";
+import SessionOut from "@/components/SessionOut";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
-    mode: 'history',
-    base: process.env.BASE_URL,
-    routes: [
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes: [
+    {
+      path: "/",
+      name: "Group Member Login",
+      component: MemberLogin
+    },
+    {
+      path: "/sessionOut",
+      name: "sessionOut",
+      component: SessionOut
+    },
+    {
+      path: "/group/register",
+      name: "Group Registeration",
+      component: () => import("@/components/Register.vue")
+    },
+    {
+      path: "/member/home",
+      name: "Member Home",
+      component: () => import("@/components/Home.vue"),
+      children: [
         {
-            path: '/',
-            name: 'Group Member Login',
-            component: MemberLogin
-        }, {
-            path: '/sessionOut',
-            name: 'sessionOut',
-            component: SessionOut
-        }, {
-            path: '/group/register',
-            name: 'Group Registeration',
-            component: () => import('@/group/Register.vue')
-        }, {
-            path: '/group/home',
-            name: 'Group Home',
-            component: () => import('@/group/Home.vue'),
-            children: [
-                {
-                    path: '/group/home/projects',
-                    name: 'Projects of Group',
-                    component: require('@/group/Projects.vue').default
-                }, {
-                    path: '/group/home/members',
-                    name: 'Members of Group',
-                    component: require('@/group/Members.vue').default
-                }
-            ]
-        }, {
-            path: '/member/home',
-            name: 'Member Home',
-            component: () => import('@/member/Home.vue'),
-            children: [
-                {
-                    path: '/member/home/projects',
-                    component: require('@/member/Projects.vue').default
-                }, {
-                    path: '/member/home/project/:projectId',
-                    component: require('@/member/Project.vue').default
-                }, {
-                    path: '/member/home/textfolder/:textfolderId',
-                    component: require('@/member/TextFolder.vue').default
-                }
-            ]
+          path: "/member/home/projects",
+          component: require("@/components/Projects.vue").default
+        },
+        {
+          path: "/member/home/project/:projectId",
+          component: require("@/components/Project.vue").default
+        },
+        {
+          path: "/member/home/textfolder/:textfolderId",
+          component: require("@/components/TextFolder.vue").default
         }
-    ]
-})
+      ]
+    }
+  ]
+});

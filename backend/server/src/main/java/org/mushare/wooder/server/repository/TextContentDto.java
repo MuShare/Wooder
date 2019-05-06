@@ -1,6 +1,5 @@
 package org.mushare.wooder.server.repository;
 
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TextContentDto implements Serializable {
+public class TextContentDto {
 
   @ManyToOne
   @JoinColumn(nullable = false, name = "text_id")

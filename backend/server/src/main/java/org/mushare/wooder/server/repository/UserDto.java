@@ -43,10 +43,10 @@ public class UserDto {
   private String password;
 
   @Column(nullable = false)
-  private Long createdAt;
+  private Long createTime;
 
   @Column(nullable = false)
-  private Long updatedAt;
+  private Long updateTime;
 
   @Column(nullable = false)
   private String email;

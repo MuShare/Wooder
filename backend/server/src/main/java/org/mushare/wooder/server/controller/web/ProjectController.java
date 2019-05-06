@@ -24,7 +24,8 @@ public class ProjectController {
   private ProjectService projectService;
 
   @RequestMapping(value = Endpoints.PROJECT_ADD, method = RequestMethod.PUT)
-  public OperationResponse createProject(@RequestBody ProjectRequest projectRequest) {
+  public OperationResponse createProject(@RequestBody ProjectRequest projectRequest)
+      throws Exception {
     return projectService.createProject(projectRequest);
   }
 

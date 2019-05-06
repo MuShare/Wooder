@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 @Data
 public class LanguageListResponse {
+
   private long totalCount;
   private List<LanguageInfoResponse> languageListItems;
 }
