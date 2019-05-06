@@ -34,15 +34,15 @@ public class ProjectController {
   }
 
   @RequestMapping(value = Endpoints.PROJECT_LIST, method = RequestMethod.GET)
-  public ProjectInfoListResponse getProjectListByGroup(@RequestParam long groupId,
-      @RequestParam int pageNumber, @RequestParam int pageSize) {
-    return projectService.projectInfoList(groupId, pageNumber, pageSize);
+  public ProjectInfoListResponse getProjectListByGroup(@RequestParam int pageNumber,
+      @RequestParam int pageSize) {
+    return projectService.projectInfoList(pageNumber, pageSize);
   }
 
   @RequestMapping(value = Endpoints.PROJECT
       + "/{projectId}/textfolder/add", method = RequestMethod.POST)
-  public OperationResponse createFolder(@PathVariable String projectId, @RequestParam String name) {
-    return null;
+  public OperationResponse createFolder(@PathVariable long projectId, @RequestParam String name) {
+    return projectService.createTextFolder(projectId, name);
   }
 
   @RequestMapping(value = Endpoints.PROJECT

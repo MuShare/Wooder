@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +58,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         .builder()
         .authorities(currentUser.getAuthorities().stream().map(GrantedAuthority::getAuthority)
             .collect(Collectors.toList()))
-        .email(Long.parseLong(currentUser.getUsername())).build();
+        .email(currentUser.getUsername())
+        .build();
     Key key = Keys.hmacShaKeyFor(SecurityConstants.SECRET.getBytes(UTF_8));
     String jwt = Jwts.builder().setSubject(mapper.writeValueAsString(token)).signWith(key)
         .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))

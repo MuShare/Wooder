@@ -4,14 +4,18 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mushare.wooder.server.repository.AuthorityRepository;
 import org.mushare.wooder.server.repository.GroupDto;
 import org.mushare.wooder.server.repository.LanguageDto;
 import org.mushare.wooder.server.repository.LanguageRepository;
+import org.mushare.wooder.server.repository.ProjectAuthorityDto;
+import org.mushare.wooder.server.repository.ProjectAuthorityRepository;
 import org.mushare.wooder.server.repository.ProjectDto;
 import org.mushare.wooder.server.repository.ProjectRepository;
 import org.mushare.wooder.server.repository.TextFolderDto;
 import org.mushare.wooder.server.repository.TextFolderRepository;
 import org.mushare.wooder.server.repository.UserDto;
+import org.mushare.wooder.server.security.SecurityConstants.Authority;
 import org.mushare.wooder.spec.request.ProjectRequest;
 import org.mushare.wooder.spec.response.LanguageInfoResponse;
 import org.mushare.wooder.spec.response.LanguageListResponse;
@@ -37,8 +41,10 @@ public class ProjectService {
   private SecurityService securityService;
   private TextFolderRepository textFolderRepository;
   private LanguageRepository languageRepository;
+  private AuthorityRepository authorityRepository;
+  private ProjectAuthorityRepository projectAuthorityRepository;
 
-  public OperationResponse createProject(ProjectRequest projectRequest) {
+  public OperationResponse createProject(ProjectRequest projectRequest) throws Exception {
     ProjectDto createdProjectDto = projectRepository.save(ProjectDto
         .builder()
         .createdAt(System.currentTimeMillis())
@@ -48,6 +54,15 @@ public class ProjectService {
         .createdByUserDto(
             entityManager.getReference(UserDto.class, securityService.getCurrentUserId()))
         .build());
+    projectRepository.save(createdProjectDto);
+    ProjectAuthorityDto projectAuthorityDto = ProjectAuthorityDto.builder()
+        .authorityDto(authorityRepository.findByAuthority(Authority.PROJECT_ADMIN))
+        .projectDto(createdProjectDto)
+        .userDto(securityService.getCurrentUser())
+        .createTime(System.currentTimeMillis())
+        .updateTime(System.currentTimeMillis())
+        .build();
+    projectAuthorityRepository.save(projectAuthorityDto);
     return OperationResponse
         .builder()
         .succeed(true)
@@ -71,24 +86,33 @@ public class ProjectService {
         ).orElse(ProjectInfoResponse.builder().build());
   }
 
-  public ProjectInfoListResponse projectInfoList(long groupId, int pageNumber, int pageSize) {
-    Page<ProjectDto> projectDtos = projectRepository
-        .findByGroupDtoId(groupId, PageRequest.of(pageNumber, pageSize));
-    return ProjectInfoListResponse.builder()
-        .totalCount(projectDtos.getTotalElements())
-        .projectInfoResponses(projectDtos.get()
-            .map(projectDto -> ProjectInfoResponse.builder()
-                .name(projectDto.getName())
-                .description(projectDto.getDescription())
-                .createTime(projectDto.getCreatedAt())
-                .id(projectDto.getId())
-                .createdByUserId(projectDto.getCreatedByUserDto().getId())
-                .createdByUserName(projectDto.getCreatedByUserDto().getUsername())
-                .groupId(projectDto.getGroupDto().getId())
-                .groupName(projectDto.getGroupDto().getName())
-                .build()
-            ).collect(Collectors.toList()))
-        .build();
+  public ProjectInfoListResponse projectInfoList(int pageNumber, int pageSize) {
+    try {
+      Page<ProjectAuthorityDto> projectAuthorityDtos = projectAuthorityRepository
+          .findByUserDtoId(securityService.getCurrentUserId(),
+              PageRequest.of(pageNumber, pageSize));
+      return ProjectInfoListResponse.builder()
+          .totalCount(projectAuthorityDtos.getTotalElements())
+          .projectInfoResponses(projectAuthorityDtos.get()
+              .map(projectAuthorityDto -> {
+                    ProjectDto projectDto = projectAuthorityDto.getProjectDto();
+                    return ProjectInfoResponse.builder()
+                        .name(projectDto.getName())
+                        .description(projectDto.getDescription())
+                        .createTime(projectDto.getCreatedAt())
+                        .id(projectDto.getId())
+                        .createdByUserId(projectDto.getCreatedByUserDto().getId())
+                        .createdByUserName(projectDto.getCreatedByUserDto().getUsername())
+                        .groupId(projectDto.getGroupDto().getId())
+                        .groupName(projectDto.getGroupDto().getName())
+                        .build();
+                  }
+              ).collect(Collectors.toList()))
+          .build();
+    } catch (Exception ex) {
+      log.error("failed to get project list", ex);
+      return ProjectInfoListResponse.builder().build();
+    }
   }
 
   public OperationResponse createTextFolder(long projectId, String textFolderName) {

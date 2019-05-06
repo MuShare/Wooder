@@ -2,14 +2,16 @@ package org.mushare.wooder.server.security;
 
 public class SecurityConstants {
 
-  public static final String SECRET = "39fXSY6CTSx6a7uzCbzHvdkM7RPQ8mbd";
-  public static final long EXPIRATION_TIME = 60 * 60 * 24 * 1000; // 1 days
-  public static final String TOKEN_PREFIX = "Bearer ";
-  public static final String HEADER_STRING = "Authorization";
+  static final String SECRET = "39fXSY6CTSx6a7uzCbzHvdkM7RPQ8mbd";
+  static final long EXPIRATION_TIME = 60 * 60 * 24 * 1000; // 1 days
+  static final String TOKEN_PREFIX = "Bearer ";
+  static final String HEADER_STRING = "Authorization";
 
   public enum Authority {
     ADMIN("ADMIN"),
-    USER("USER");
+    USER("USER"),
+    PROJECT_MEMBER("PROJECT_MEMBER"),
+    PROJECT_ADMIN("PROJECT_ADMIN");
 
     private String authority;
 

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import MemberLogin from '@/member/Login.vue'
-import GroupLogin from '@/group/Login.vue'
+import MemberLogin from '@/components/Login.vue'
 import SessionOut from '@/components/SessionOut'
 
 Vue.use(Router)
@@ -14,10 +13,6 @@ export default new Router({
             path: '/',
             name: 'Group Member Login',
             component: MemberLogin
-        }, {
-            path: '/group/login',
-            name: 'Group Manager Login',
-            component: GroupLogin
         }, {
             path: '/sessionOut',
             name: 'sessionOut',

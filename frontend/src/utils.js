@@ -1,5 +1,6 @@
 import moment from "moment";
 
+export const baseUrl = "/wooder"
 export const TOKEN = "token";
 export const saveToken = token => {
   localStorage.setItem(TOKEN, token);

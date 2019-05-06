@@ -43,15 +43,18 @@ public class SecurityService implements UserDetailsService {
     if (userDto == null) {
       throw new UsernameNotFoundException(email);
     }
-    return new User(String.valueOf(userDto.getId()), userDto.getPassword(),
+    return new User(String.valueOf(userDto.getEmail()), userDto.getPassword(),
         userDto.getAuthorities());
   }
 
   public UserDto getCurrentUser() throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (!(authentication instanceof AnonymousAuthenticationToken)) {
-      return userRepository.findById(Long.parseLong(authentication.getName()))
-          .orElseThrow(() -> new UsernameNotFoundException("Cannot find user"));
+      UserDto userDto = userRepository.findByEmail(authentication.getName());
+      if (userDto == null) {
+        throw new UsernameNotFoundException("Cannot find user");
+      }
+      return userDto;
     } else {
       throw new Exception("Unauthenticated");
     }
@@ -60,7 +63,12 @@ public class SecurityService implements UserDetailsService {
   public long getCurrentUserId() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (!(authentication instanceof AnonymousAuthenticationToken)) {
-      return Long.parseLong(authentication.getName());
+      UserDto userDto = userRepository.findByEmail(authentication.getName());
+      if(userDto != null){
+        return userDto.getId();
+      }
+      log.error("User not exist");
+      return -1;
     } else {
       log.error("Unauthenticated User");
       return -1;

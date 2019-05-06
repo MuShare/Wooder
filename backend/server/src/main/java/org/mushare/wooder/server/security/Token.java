@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Token {
 
-  private long email;
+  private String email;
   private List<String> authorities;
 }
