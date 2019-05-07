@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController(value = Endpoints.TEXT_FOLDER)
+@RestController
+@RequestMapping(value = Endpoints.TEXT_FOLDER)
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class TextFolderController {
 
@@ -22,8 +23,8 @@ public class TextFolderController {
   private TextService textService;
 
   @RequestMapping(value = "/{textfolderId}", method = RequestMethod.GET)
-  public TextFolderListItem getTextFolderInfo(@PathVariable long textFolderId) {
-    return textFolderService.getTextFolderInfo(textFolderId);
+  public TextFolderListItem getTextFolderInfo(@PathVariable long textfolderId) {
+    return textFolderService.getTextFolderInfo(textfolderId);
   }
 
   @RequestMapping(value = "/{textfolderId}/text/add", method = RequestMethod.POST)
@@ -33,8 +34,9 @@ public class TextFolderController {
   }
 
   @RequestMapping(value = "/{textfolderId}/text/list", method = RequestMethod.GET)
-  public TextListResponse getTextByTextFolderId(@PathVariable long textfolderId, int pageNumber,
-      int pageSize) {
+  public TextListResponse getTextByTextFolderId(@PathVariable long textfolderId,
+      @RequestParam(defaultValue = "0") int pageNumber,
+      @RequestParam(defaultValue = "10") int pageSize) {
     return textService.getTextByTextfolderId(textfolderId, pageNumber, pageSize);
   }
 

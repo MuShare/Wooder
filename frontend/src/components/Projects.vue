@@ -37,8 +37,8 @@ export default {
   data() {
     return {
       projects: {
-          totalCount: 0,
-          projectInfoResponses: []
+        totalCount: 0,
+        projectInfoResponses: []
       },
       form: {
         name: "",

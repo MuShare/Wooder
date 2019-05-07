@@ -16,6 +16,7 @@ public class TextFolderListResponse {
   public static class TextFolderListItem {
 
     private String name;
+    private long id;
     private long createTime;
     private long updateTime;
     private ProjectInfoResponse projectInfoResponse;

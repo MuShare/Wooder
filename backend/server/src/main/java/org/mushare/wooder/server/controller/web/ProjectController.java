@@ -48,8 +48,8 @@ public class ProjectController {
 
   @RequestMapping(value = Endpoints.PROJECT
       + "/{projectId}/textfolder/list", method = RequestMethod.GET)
-  public TextFolderListResponse createLanguage(@PathVariable long projectId,
-      @RequestParam int pageNumber, @RequestParam int pageSize) {
+  public TextFolderListResponse getTextfolderList(@PathVariable long projectId,
+      @RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "5") int pageSize) {
     return projectService.getTextFolderList(projectId, pageNumber, pageSize);
   }
 
@@ -63,7 +63,7 @@ public class ProjectController {
   @RequestMapping(value = Endpoints.PROJECT
       + "/{projectId}/language/list", method = RequestMethod.GET)
   public LanguageListResponse getLanguages(@PathVariable long projectId,
-      @RequestParam int pageNumber, @RequestParam int pageSize) {
+      @RequestParam(defaultValue = "0") int pageNumber , @RequestParam(defaultValue = "10") int pageSize) {
     return projectService.getLanguageList(projectId, pageNumber, pageSize);
   }
 }

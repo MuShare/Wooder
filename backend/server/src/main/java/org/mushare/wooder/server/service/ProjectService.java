@@ -72,8 +72,10 @@ public class ProjectService {
         .map(projectDto -> ProjectInfoResponse.builder().createTime(projectDto.getCreatedAt())
             .createdByUserId(projectDto.getCreatedByUserDto().getId())
             .createdByUserName(projectDto.getCreatedByUserDto().getUsername())
-            .groupId(projectDto.getGroupDto().getId()).groupName(projectDto.getGroupDto().getName())
-            .description(projectDto.getDescription()).name(projectDto.getName())
+            .groupId(projectDto.getGroupDto() == null ? -1 : projectDto.getGroupDto().getId())
+            .groupName(projectDto.getGroupDto() == null ? null : projectDto.getGroupDto().getName())
+            .description(projectDto.getDescription())
+            .name(projectDto.getName())
             .id(projectDto.getId())
             .build())
         .orElse(ProjectInfoResponse.builder().build());
@@ -116,7 +118,10 @@ public class ProjectService {
         .textFolderListItems(textFolderDtos.get()
             .map(textFolderDto -> TextFolderListItem.builder()
                 .createTime(textFolderDto.getCreatedAt())
-                .updateTime(textFolderDto.getUpdatedAt()).name(textFolderDto.getName()).build())
+                .updateTime(textFolderDto.getUpdatedAt())
+                .name(textFolderDto.getName())
+                .id(textFolderDto.getId())
+                .build())
             .collect(Collectors.toList()))
         .build();
   }
@@ -137,7 +142,9 @@ public class ProjectService {
             .map(
                 languageDto -> LanguageInfoResponse.builder().createTime(languageDto.getCreatedAt())
                     .updateTime(languageDto.getUpdatedAt()).id(languageDto.getId())
-                    .identifier(languageDto.getIdentifier()).id(languageDto.getId()).build())
+                    .identifier(languageDto.getIdentifier()).id(languageDto.getId())
+                    .name(languageDto.getName())
+                    .build())
             .collect(Collectors.toList()))
         .build();
   }
