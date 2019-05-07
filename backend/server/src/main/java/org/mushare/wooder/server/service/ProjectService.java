@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mushare.wooder.server.repository.AuthorityRepository;
 import org.mushare.wooder.server.repository.GroupDto;
+import org.mushare.wooder.server.repository.GroupRepository;
 import org.mushare.wooder.server.repository.LanguageDto;
 import org.mushare.wooder.server.repository.LanguageRepository;
 import org.mushare.wooder.server.repository.ProjectAuthorityDto;
@@ -43,12 +44,17 @@ public class ProjectService {
   private LanguageRepository languageRepository;
   private AuthorityRepository authorityRepository;
   private ProjectAuthorityRepository projectAuthorityRepository;
+  private GroupRepository groupRepository;
 
   public OperationResponse createProject(ProjectRequest projectRequest) throws Exception {
+    System.out.println(projectRequest);
     ProjectDto createdProjectDto = projectRepository
         .save(ProjectDto.builder().createdAt(System.currentTimeMillis())
             .updatedAt(System.currentTimeMillis()).description(projectRequest.getDescription())
-            .groupDto(entityManager.getReference(GroupDto.class, projectRequest.getGroupId()))
+            .groupDto(groupRepository.existsById(projectRequest.getGroupId()) ? entityManager
+                .getReference(GroupDto.class, projectRequest.getGroupId()) : null)
+            .name(projectRequest.getName())
+            .description(projectRequest.getDescription())
             .createdByUserDto(
                 entityManager.getReference(UserDto.class, securityService.getCurrentUserId()))
             .build());
@@ -85,8 +91,9 @@ public class ProjectService {
                 .description(projectDto.getDescription()).createTime(projectDto.getCreatedAt())
                 .id(projectDto.getId()).createdByUserId(projectDto.getCreatedByUserDto().getId())
                 .createdByUserName(projectDto.getCreatedByUserDto().getUsername())
-                .groupId(projectDto.getGroupDto().getId())
-                .groupName(projectDto.getGroupDto().getName())
+                .groupId(projectDto.getGroupDto() == null ? -1 : projectDto.getGroupDto().getId())
+                .groupName(
+                    projectDto.getGroupDto() == null ? null : projectDto.getGroupDto().getName())
                 .build();
           }).collect(Collectors.toList())).build();
     } catch (Exception ex) {

@@ -40,7 +40,7 @@ public class ProjectDto {
   private UserDto createdByUserDto;
 
   @ManyToOne
-  @JoinColumn(nullable = false, name = "group_id")
+  @JoinColumn(name = "group_id")
   private GroupDto groupDto;
 
 }

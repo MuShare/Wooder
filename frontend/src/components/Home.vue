@@ -44,13 +44,6 @@ export default {
   },
   methods: {
     loadMemberInfo() {
-      // this.axios.get('/web/member/info').then(response => {
-      //     if (response && response.status == 200) {
-      //         this.member = response.data.result.member
-      //     }
-      // }).catch(() => {
-      //     this.$router.push('/sessionOut')
-      // })
       const url = `${baseUrl}/web/user/info`;
       fetch(url, {
         headers: { Authorization: getToken() }
