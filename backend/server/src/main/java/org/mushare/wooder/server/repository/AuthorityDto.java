@@ -22,7 +22,9 @@ public class AuthorityDto {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @Enumerated
   @Column(unique = true)
   private Authority authority;
+
 }

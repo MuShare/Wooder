@@ -24,9 +24,11 @@ public class TextDto {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  // TODO: Use the same style like 'createAt'.
   @Column(nullable = false)
   private Long createTime;
 
+  // TODO: Use the same style like 'createAt'.
   @Column(nullable = false)
   private Long updateTime;
 

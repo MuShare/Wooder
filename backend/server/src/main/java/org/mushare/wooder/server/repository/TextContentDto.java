@@ -23,15 +23,22 @@ public class TextContentDto {
   @ManyToOne
   @JoinColumn(nullable = false, name = "text_id")
   protected TextDto text;
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  // TODO: Use the same style like 'createAt'.
   @Column(nullable = false)
   private Long createTime;
+
+  // TODO: Use the same style like 'createAt'.
   @Column(nullable = false)
   private Long updateTime;
+  
   @Column(nullable = false)
   private String string;
+  
   @ManyToOne
   @JoinColumn(nullable = false, name = "language_id")
   private LanguageDto languageDto;
