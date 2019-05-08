@@ -206,7 +206,7 @@ export default {
       //   });
     },
     editText(textId) {
-      const url = `${baseUrl}/web/text/${textId}`;
+      const url = `${baseUrl}/web/text/edit`;
       fetch(url, {
         headers: {
           Authorization: getToken(),
@@ -244,7 +244,7 @@ export default {
           "Content-Type": "application/json"
         },
         method: "POST",
-        data: JSON.stringify(this.editText)
+        body: JSON.stringify(this.editText)
       })
         .then(handleError)
         .then(operationResponse => {
