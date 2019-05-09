@@ -1,0 +1,8 @@
+rootProject.name = 'Wooder'
+include 'backend'
+include 'backend:server'
+include 'backend:spec'
+include 'frontend'
+
+
+
